@@ -1,5 +1,5 @@
 import { ProductData } from "../../data/product.js";
-import { ProductView } from "../../ui/product/index.js";
+import { CardView } from "../../ui/card/index.js";
 import { htmlToFragment } from "../../lib/utils.js";
 import template from "./template.html?raw";
 
@@ -37,7 +37,7 @@ V.createPageFragment = function( data ){
    let pageFragment = htmlToFragment(template);
    
    // Générer les produits
-   let productsDOM = ProductView.dom(data);
+   let productsDOM = CardView.dom(data);
    
    // Remplacer le slot par les produits
    pageFragment.querySelector('slot[name="products"]').replaceWith(productsDOM);

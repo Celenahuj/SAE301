@@ -1,0 +1,16 @@
+<article class="overflow-hidden rounded-lg bg-white p-6 shadow-md transition hover:shadow-lg w-xs">
+  <div class="mb-4 flex justify-center">
+    <img src="/public/{{image}}" alt="{{name}}" class="h-64 w-60 object-cover rounded">
+  </div>
+  <h3 class="mb-4 text-xl font-normal text-center text-gray-900" style="font-family: 'Cormorant', serif; letter-spacing: 1.75px;">{{name}}</h3>
+  <div class="flex items-center justify-between">
+    <span class="text-base font-normal text-gray-900" style="letter-spacing: 1.12px;">{{price}}€</span>
+    <button 
+      data-buy="{{id}}" 
+      class="rounded-lg bg-white p-2 transition hover:bg-gray-100"
+      aria-label="Ajouter au panier"
+    >
+      <img src="/public/icon.png" alt="Ajouter au panier" class="h-6 w-6">
+    </button>
+  </div>
+</article>

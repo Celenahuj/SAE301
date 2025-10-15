@@ -1,14 +1,15 @@
-import { htmlToFragment } from "../../lib/utils";
+import { genericRenderer, htmlToFragment } from "../../lib/utils.js";
 import template from "./template.html?raw";
 
 let FooterView = {
-  html: function () {
-    return template;
+  html: function (data) {
+    return genericRenderer(template, data);
   },
 
-  dom: function () {
-    return htmlToFragment(template);
+  dom: function (data) {
+    return htmlToFragment( FooterView.html(data) );
   }
+
 };
 
 export { FooterView };
