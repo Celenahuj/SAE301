@@ -1,16 +1,18 @@
 import { htmlToFragment } from "../../lib/utils.js";
+import { MainView } from "../main/index.js";
 import template from "./template.html?raw";
 
-// HeaderView est un composant statique
-// on ne fait que charger le template HTML
-// en donnant la possibilité de l'avoir sous forme html ou bien de dom
 let HeaderView = {
-  html: function () {
-    return template;
+  html() {
+    let mainHtml = MainView.html();
+    return template.replace('<slot name="categories-nav"></slot>', mainHtml);
   },
 
-  dom: function () {
-    return htmlToFragment(template);
+  dom() {
+    let fragment = htmlToFragment(template);
+    let slot = fragment.querySelector('slot[name="categories-nav"]');
+    if (slot) slot.replaceWith(MainView.dom());
+    return fragment;
   }
 };
 

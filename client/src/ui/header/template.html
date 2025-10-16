@@ -1,10 +1,38 @@
-<header style="background: #333; color: white; padding: 1rem;">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2 style="margin: 0;">Click & Collect</h2>
-        <nav style="display: flex; gap: 1rem;">
-            <a href="/" data-link style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Accueil</a>
-            <a href="/products" data-link style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">Produits</a>
-            <a href="/about" data-link style="color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">À propos</a>
-        </nav>
+<header class="flex items-center justify-between px-8 py-4 bg-white shadow-sm">
+  <!-- Logo Section -->
+  <div class="flex items-center gap-24">
+    <div class="w-[90px] h-[126px]">
+      <img
+        src="/logo.png"
+        alt="Logo"
+        class="w-full h-full object-cover"
+      />
     </div>
+
+    <!-- Navigation Links -->
+    <div class="flex items-center gap-12">
+      <a
+        href="/products"
+        data-link
+        class="px-0 py-2 text-black font-semibold text-[15.49px] tracking-[1.08px] hover:opacity-70 transition"
+        style="font-family: &quot;Inter&quot;, sans-serif"
+      >
+        NOS PRODUITS
+      </a>
+      <slot name="categories-nav"></slot>
+    </div>
+  </div>
+
+  <!-- Icons Section -->
+  <div class="flex items-center gap-6">
+    <!-- User Icon -->
+    <a href="/account" data-link class="hover:opacity-70 transition">
+      <img src="/icon-user.png" alt="User Account" class="w-6 h-6" />
+    </a>
+
+    <!-- Basket Icon -->
+    <a href="/cart" data-link class="hover:opacity-70 transition">
+      <img src="/icon-shop.png" alt="Shopping Cart" class="w-6 h-6" />
+    </a>
+  </div>
 </header>

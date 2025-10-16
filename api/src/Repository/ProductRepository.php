@@ -40,6 +40,8 @@ class ProductRepository extends EntityRepository {
         $p = new Product($answer->id);
         $p->setName($answer->name);
         $p->setIdcategory($answer->category);
+        $p->setPrice($answer->price);
+        $p->setImage($answer->image);
         return $p;
     }
 
@@ -53,6 +55,8 @@ class ProductRepository extends EntityRepository {
             $p = new Product($obj->id);
             $p->setName($obj->name);
             $p->setIdcategory($obj->category);
+            $p->setPrice($obj->price);
+            $p->setImage($obj->image);
             array_push($res, $p);
         }
        
@@ -60,7 +64,7 @@ class ProductRepository extends EntityRepository {
     }
 
     public function save($product){
-        $requete = $this->cnx->prepare("insert into Product (name, category) values (:name, :idcategory)");
+       $requete = $this->cnx->prepare("insert into Product (name, category, price, image) values (:name, :idcategory)");    
         $name = $product->getName();
         $idcat = $product->getIdcategory();
         $requete->bindParam(':name', $name );
