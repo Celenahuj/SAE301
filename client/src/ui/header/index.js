@@ -5,6 +5,7 @@ import template from "./template.html?raw";
 let HeaderView = {
   html() {
     let mainHtml = MainView.html();
+    console.log(mainHtml);
     return template.replace('<slot name="categories-nav"></slot>', mainHtml);
   },
 

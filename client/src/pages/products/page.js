@@ -1,6 +1,7 @@
 import { ProductData } from "../../data/product.js";
 import { CategoryData } from "../../data/category.js";
 import { CardView } from "../../ui/card/index.js";
+import { MainView } from "../../ui/main/index.js";
 import { htmlToFragment } from "../../lib/utils.js";
 import template from "./template.html?raw";
 
@@ -15,9 +16,11 @@ C.handler_clickOnProduct = function(ev){
 }
 
 C.init = async function(params){
-    if(params?.id){
+    //  if(params?.id) {
+    if(params.id){
         // Si un id de catégorie est présent, on filtre
         M.products = await CategoryData.fetchByCategory(params.id);
+
     } else {
         // Sinon, tous les produits
         M.products = await ProductData.fetchAll(); 
@@ -34,8 +37,10 @@ V.init = function(data){
 
 V.createPageFragment = function(data){
     let pageFragment = htmlToFragment(template);
+    let categoriesDOM = MainView.dom(data);
     let productsDOM = CardView.dom(data);
     pageFragment.querySelector('slot[name="products"]').replaceWith(productsDOM);
+    pageFragment.querySelector('slot[name="categories-nav"]').replaceWith(categoriesDOM);
     return pageFragment;
 }
 

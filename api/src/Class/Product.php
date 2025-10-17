@@ -17,6 +17,9 @@ class Product extends Entity {
     private ?int $idcategory = null; // id de la catégorie du produit (nullable)
     private ?float $price = null; // prix du produit (nullable)
     private ?string $image = null; // l'image du produit (nullable)
+    private ?string $description = null; // la description du produit (nullable)
+    private ?int $calories = null; // les calories du produit (nullable)
+    private ?string $allergens = null; // les allergènes du produit (nullable)
 
     public function __construct(int $id){
         $this->id = $id;
@@ -59,7 +62,10 @@ class Product extends Entity {
             "name" => $this->name,
             "category" => $this->idcategory,
             "price" => $this->price,
-            "image" => $this->image
+            "image" => $this->image,
+            "description" => $this->description,
+            "calories" => $this->calories,
+            "allergens" => $this->allergens
         ];
     }
 
@@ -150,4 +156,51 @@ class Product extends Entity {
         $this->image = $image;
         return $this;
     }
+
+    /**
+     * Get the value of description
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+    /**
+     * Set the value of description
+     *
+     * @return  self
+     */
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+
+
+    public function getCalories(): ?int
+    {
+        return $this->calories;
+    }
+
+
+    public function setCalories(int $calories): self
+    {
+        $this->calories = $calories;
+        return $this;
+    }
+
+
+
+    
+    public function getAllergens(): ?string
+    {
+        return $this->allergens;
+    }   
+
+    public function setAllergens(string $allergens): self
+    {
+        $this->allergens = $allergens;
+        return $this;
+    }
+
 }

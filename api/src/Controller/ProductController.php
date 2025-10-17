@@ -40,7 +40,10 @@ class ProductController extends EntityController {
         $p->setIdcategory($obj->category);
         $p->setPrice($obj->price);
         $p->setImage($obj->image);
-        $ok = $this->products->save($p); 
+        $p->setDescription($obj->description);
+        $p->setCalories($obj->calories);
+        $p->setAllergens($obj->allergens);
+        $ok = $this->products->save($p);
         return $ok ? $p : false;
     }
    
