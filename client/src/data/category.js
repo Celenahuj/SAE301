@@ -47,5 +47,4 @@ CategoryData.fetchByCategory = async function(categoryId) {
     return data == false ? fakeProducts : data;
 }
 
-
 export {CategoryData};

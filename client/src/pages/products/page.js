@@ -1,49 +1,53 @@
 import { ProductData } from "../../data/product.js";
 import { CategoryData } from "../../data/category.js";
 import { CardView } from "../../ui/card/index.js";
-import { MainView } from "../../ui/main/index.js";
 import { htmlToFragment } from "../../lib/utils.js";
 import template from "./template.html?raw";
 
 let M = { products: [] };
 let C = {};
 
+// Gestion du clic sur un produit
 C.handler_clickOnProduct = function(ev){
-    if(ev.target.dataset.buy!==undefined){
+    if(ev.target.dataset.buy !== undefined){
         let id = ev.target.dataset.buy;
         alert(`Le produit d'identifiant ${id} ? Excellent choix !`);
     }
 }
 
+// Initialisation
 C.init = async function(params){
-    //  if(params?.id) {
-    if(params.id){
-        // Si un id de catégorie est présent, on filtre
+    // récupérer les produits
+    if(params?.id){
         M.products = await CategoryData.fetchByCategory(params.id);
-
     } else {
-        // Sinon, tous les produits
         M.products = await ProductData.fetchAll(); 
     }
+
+    // récupérer toutes les catégories depuis la base de donnée
+
     return V.init(M.products);
 }
 
 let V = {};
-V.init = function(data){
-    let fragment = V.createPageFragment(data);
+V.init = function(products){
+    let fragment = V.createPageFragment(products);
     V.attachEvents(fragment);
     return fragment;
 }
 
-V.createPageFragment = function(data){
+// Création de la page
+V.createPageFragment = function(products){
     let pageFragment = htmlToFragment(template);
-    let categoriesDOM = MainView.dom(data);
-    let productsDOM = CardView.dom(data);
-    pageFragment.querySelector('slot[name="products"]').replaceWith(productsDOM);
-    pageFragment.querySelector('slot[name="categories-nav"]').replaceWith(categoriesDOM);
+
+    // injecter les produits dynamiques
+    let productsSlot = pageFragment.querySelector('slot[name="products"]');
+    if (productsSlot) productsSlot.replaceWith(CardView.dom(products));
+
     return pageFragment;
 }
 
+// Attacher les événements
 V.attachEvents = function(pageFragment){
     pageFragment.firstElementChild.addEventListener("click", C.handler_clickOnProduct);
     return pageFragment;
