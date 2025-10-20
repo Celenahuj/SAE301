@@ -60,7 +60,7 @@ C.init = async function (params) {
     // Créer le HTML de la galerie
     p.gallery = "";
     for (let img of p.images) {
-      p.gallery += `<img src="${img.src}" alt="Image ${img.id}" class="w-full h-24 object-cover rounded cursor-pointer hover:opacity-75 transition">`;
+      p.gallery += `<img src="${img.src}" alt="Image ${img.id}" class="w-full aspect-square object-cover rounded cursor-pointer hover:opacity-75 transition">`;
     }
   }
   console.log("Images du produit :", p.images);
