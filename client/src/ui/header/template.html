@@ -1,38 +1,70 @@
-<header class="flex items-center justify-between px-8 py-4 bg-white shadow-sm">
-  <!-- Logo Section -->
-  <div class="flex items-center gap-24">
-    <div class="w-[90px] h-[126px]">
-      <img
-        src="/logo.png"
-        alt="Logo"
-        class="w-full h-full object-cover"
-      />
+<header class="relative bg-white shadow-sm">
+  <div class="flex items-center justify-between px-4 py-4 md:px-8">
+    <!-- Logo Section -->
+    <div class="flex items-center">
+      <a href="/" data-link class="w-16 h-20 md:w-[90px] md:h-[126px]">
+        <img
+          src="/logo.png"
+          alt="Logo"
+          class="w-full h-full object-cover"
+        />
+      </a>
     </div>
 
-    <!-- Navigation Links -->
-    <div class="flex items-center gap-12">
+    <!-- Desktop Navigation -->
+    <nav class="hidden lg:flex items-center gap-8 xl:gap-12">
       <a
         href="/products"
         data-link
-        class="px-0 py-2 text-black font-semibold text-[15.49px] tracking-[1.08px] hover:opacity-70 transition"
-        style="font-family: &quot;Inter&quot;, sans-serif"
+        class="text-black text-sm tracking-wider hover:opacity-70 transition-opacity duration-300"
       >
         NOS PRODUITS
       </a>
       <slot name="categories-nav"></slot>
+    </nav>
+
+    <!-- Icons Section -->
+    <div class="flex items-center gap-4 md:gap-6">
+      <!-- User Icon -->
+      <a href="/account" data-link class="hover:opacity-70 transition-opacity duration-300">
+        <img src="/icon-user.png" alt="Compte utilisateur" class="w-5 h-5 md:w-6 md:h-6" />
+      </a>
+
+      <!-- Basket Icon -->
+      <a href="/cart" data-link class="hover:opacity-70 transition-opacity duration-300">
+        <img src="/icon-shop.png" alt="Panier" class="w-5 h-5 md:w-6 md:h-6" />
+      </a>
+
+      <!-- Burger Menu Button (Mobile) -->
+      <button 
+        id="burger-menu-btn"
+        class="lg:hidden flex flex-col justify-center items-center w-8 h-8 space-y-1.5 focus:outline-none"
+        aria-label="Menu"
+      >
+        <span class="block w-6 h-0.5 bg-black transition-all duration-300"></span>
+        <span class="block w-6 h-0.5 bg-black transition-all duration-300"></span>
+        <span class="block w-6 h-0.5 bg-black transition-all duration-300"></span>
+      </button>
     </div>
   </div>
 
-  <!-- Icons Section -->
-  <div class="flex items-center gap-6">
-    <!-- User Icon -->
-    <a href="/account" data-link class="hover:opacity-70 transition">
-      <img src="/icon-user.png" alt="User Account" class="w-6 h-6" />
-    </a>
-
-    <!-- Basket Icon -->
-    <a href="/cart" data-link class="hover:opacity-70 transition">
-      <img src="/icon-shop.png" alt="Shopping Cart" class="w-6 h-6" />
-    </a>
-  </div>
+  <!-- Mobile Menu -->
+  <nav 
+    id="mobile-menu"
+    class="hidden lg:hidden absolute top-full left-0 w-full bg-white shadow-lg z-50 transition-all duration-300"
+  >
+    <div class="flex flex-col px-4 py-6 space-y-4">
+      <a
+        href="/products"
+        data-link
+        class="text-black text-sm tracking-wider hover:opacity-70 transition-opacity duration-300 py-2"
+      >
+        NOS PRODUITS
+      </a>
+      <slot name="categories-nav-mobile"></slot>
+    </div>
+  </nav>
 </header>
+
+
+

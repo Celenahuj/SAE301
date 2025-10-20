@@ -20,6 +20,8 @@ class Product extends Entity {
     private ?string $description = null; // la description du produit (nullable)
     private ?int $calories = null; // les calories du produit (nullable)
     private ?string $allergens = null; // les allergènes du produit (nullable)
+    private ?int $product_id = null;
+    private array $images = []; // tableau des images associées au produit
 
     public function __construct(int $id){
         $this->id = $id;
@@ -65,10 +67,12 @@ class Product extends Entity {
             "image" => $this->image,
             "description" => $this->description,
             "calories" => $this->calories,
-            "allergens" => $this->allergens
+            "allergens" => $this->allergens,
+            "images" => $this->images
         ];
     }
 
+    
     /**
      * Get the value of name
      */ 
@@ -200,6 +204,15 @@ class Product extends Entity {
     public function setAllergens(string $allergens): self
     {
         $this->allergens = $allergens;
+        return $this;
+    }
+
+    public function getImages(): array {
+        return $this->images;
+    }
+
+    public function setImages(array $images): self {
+        $this->images = $images;
         return $this;
     }
 

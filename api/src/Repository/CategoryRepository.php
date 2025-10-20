@@ -57,17 +57,17 @@ class CategoryRepository extends EntityRepository {
         return $res;
     }
 
-    public function save($product){
-        $requete = $this->cnx->prepare("insert into Product (name, category) values (:name, :idcategory)");
-        $name = $product->getName();
-        $idcat = $product->getIdcategory();
+    public function save($category){
+        $requete = $this->cnx->prepare("insert into category$category (name, category) values (:name, :idcategory)");
+        $name = $category->getName();
+        $idcat = $category->getIdcategory();
         $requete->bindParam(':name', $name );
         $requete->bindParam(':idcategory', $idcat);
         $answer = $requete->execute(); // an insert query returns true or false. $answer is a boolean.
 
         if ($answer){
             $id = $this->cnx->lastInsertId(); // retrieve the id of the last insert query
-            $product->setId($id); // set the product id to its real value.
+            $category->setId($id); // set the category$category id to its real value.
             return true;
         }
           
@@ -78,7 +78,7 @@ class CategoryRepository extends EntityRepository {
         return false;
     }
 
-    public function update($product){
+    public function update($category){
         // Not implemented ! TODO when needed !
         return false;
     }

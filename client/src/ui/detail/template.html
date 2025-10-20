@@ -3,16 +3,22 @@
     {{name}}
   </h1>
 
-  <div class="mx-auto flex flex-col md:flex-row gap-12  max-w-5xl">
-    <!-- Image du produit -->
-    <div class="md:w-1/2 flex justify-center items-center">
-      <img 
-        src="/{{image}}" 
-        alt="{{name}}" 
-        class="rounded-lg object-cover w-80 h-64 md:h-auto"
-      />
-      <div class="product-gallery mt-6 flex gap-4">
-      <!-- Les images seront ajoutées ici via JS -->
+  <div class="mx-auto flex flex-col md:flex-row gap-12 max-w-5xl">
+    <!-- Section Image du produit avec galerie -->
+    <div class="md:w-1/2">
+      <!-- Image principale -->
+      <div class="flex justify-center items-center w-fit">
+        <img 
+          id="main-image"
+          src="/{{image}}" 
+          alt="{{name}}" 
+          class="rounded-lg object-cover w-full h-64 md:h-80"
+        />
+      </div>
+      
+      <!-- Galerie d'images -->
+      <div class="product-gallery grid grid-cols-4 gap-2">
+        {{gallery}}
       </div>
     </div>
 
@@ -30,7 +36,7 @@
         class="mt-8 w-full md:w-auto border border-black px-8 py-3 text-lg font-medium text-black hover:text-black hover:opacity-30 transition-all duration-300"
       >
         AJOUTER AU PANIER
-    </button>
+      </button>
     </div>
   </div>
-</article>
+</article>.

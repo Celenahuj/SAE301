@@ -13,7 +13,7 @@ M.getProductById = function (id) {
   return M.products.find((product) => product.id == id);
 };
 
-M.getImagesByProductId = function(id) {
+M.getImagesByProductId = function (id) {
   let images = [];
   for (let i = 0; i < M.productImages.length; i++) {
     let img = M.productImages[i];
@@ -47,16 +47,25 @@ C.init = async function (params) {
 
   // Charger toutes les images
   M.productImages = await ProductImageData.fetchAll();
+  console.log("ProductImages:", M.productImages);
 
   // Récupérer le produit courant
   let p = M.getProductById(productId);
 
   // Attacher les images au produit
   if (p) {
-    p.images= M.getImagesByProductId(productId); // <- ici
+    p.images = M.getImagesByProductId(productId);
+    console.log("Images:", p.images);
+
+    // Créer le HTML de la galerie
+    p.gallery = "";
+    for (let img of p.images) {
+      p.gallery += `<img src="${img.src}" alt="Image ${img.id}" class="w-full h-24 object-cover rounded cursor-pointer hover:opacity-75 transition">`;
+    }
   }
   console.log("Images du produit :", p.images);
   console.log("Product loaded:", p);
+
 
   return V.init(p);
 };
@@ -76,18 +85,6 @@ V.createPageFragment = function (data) {
   // Remplacer le slot par le composant detail
   const slot = pageFragment.querySelector('slot[name="detail"]');
   if (slot) slot.replaceWith(detailDOM);
-
-  // Ajouter les images de la galerie
-  const gallery = detailDOM.querySelector(".product-gallery");
-  if (gallery && data.images && data.images.length > 0) {
-    for (let img of data.images) {
-      const imgEl = document.createElement("img");
-      imgEl.src = img.src; // chemin construit dans M.getImagesByProductId
-      imgEl.alt = "Image " + img.id;
-      imgEl.className = "w-24 h-24 object-cover rounded";
-      gallery.appendChild(imgEl);
-    }
-  }
 
   return pageFragment;
 };

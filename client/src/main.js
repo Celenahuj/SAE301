@@ -1,4 +1,4 @@
-
+import './global.css'
 import { Router } from "./lib/router.js";
 import { AboutPage } from "./pages/about/page.js";
 import { HomePage } from "./pages/home/page.js";

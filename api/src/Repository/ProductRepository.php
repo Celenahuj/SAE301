@@ -1,5 +1,4 @@
 <?php
-
 require_once("src/Repository/EntityRepository.php");
 require_once("src/Class/Product.php");
 
@@ -19,75 +18,80 @@ require_once("src/Class/Product.php");
 class ProductRepository extends EntityRepository {
 
     public function __construct(){
-        // appel au constructeur de la classe mère (va ouvrir la connexion à la bdd)
         parent::__construct();
     }
 
-    public function find($id): ?Product{
-        /*
-            La façon de faire une requête SQL ci-dessous est "meilleur" que celle vue
-            au précédent semestre (cnx->query). Notamment l'utilisation de bindParam
-            permet de vérifier que la valeur transmise est "safe" et de se prémunir
-            d'injection SQL.
-        */
-        $requete = $this->cnx->prepare("select * from Product where id=:value"); // prepare la requête SQL
-        $requete->bindParam(':value', $id); // fait le lien entre le "tag" :value et la valeur de $id
-        $requete->execute(); // execute la requête
-        $answer = $requete->fetch(PDO::FETCH_OBJ);
-        
-        if ($answer==false) return null; // may be false if the sql request failed (wrong $id value for example)
-        
-        $p = new Product($answer->id);
-        $p->setName($answer->name);
-        $p->setIdcategory($answer->category);
-        $p->setPrice($answer->price);
-        $p->setImage($answer->image);
-        $p->setDescription($answer->description);
-        $p->setCalories($answer->calories);
-        $p->setAllergens($answer->allergens);
-        return $p;
-    }
+    public function find($id): ?Product {
+    $requete = $this->cnx->prepare("SELECT * FROM Product WHERE id=:value");
+    $requete->bindParam(':value', $id);
+    $requete->execute();
+    $answer = $requete->fetch(PDO::FETCH_OBJ);
+    
+    if ($answer == false) return null;
+    
+    $p = new Product($answer->id);
+    $p->setName($answer->name);
+    $p->setIdcategory($answer->category);
+    $p->setPrice($answer->price);
+    $p->setImage($answer->image);
+    $p->setDescription($answer->description);
+    $p->setCalories($answer->calories);
+    $p->setAllergens($answer->allergens);
+
+
+    return $p;
+}
+
 
     public function findAll(): array {
-        $requete = $this->cnx->prepare("select * from Product");
-        $requete->execute();
-        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+    $requete = $this->cnx->prepare("SELECT * FROM Product");
+    $requete->execute();
+    $answer = $requete->fetchAll(PDO::FETCH_OBJ);
 
-        $res = [];
-        foreach($answer as $obj){
-            $p = new Product($obj->id);
-            $p->setName($obj->name);
-            $p->setIdcategory($obj->category);
-            $p->setPrice($obj->price);
-            $p->setImage($obj->image);
-            $p->setDescription($obj->description);
-            $p->setCalories($obj->calories);
-            $p->setAllergens($obj->allergens);
-            array_push($res, $p);
-        }
-       
-        return $res;
+    $res = [];
+
+    $imgRepo = new ProductImageRepository();
+
+    foreach($answer as $obj){
+        $p = new Product($obj->id);
+        $p->setName($obj->name);
+        $p->setIdcategory($obj->category);
+        $p->setPrice($obj->price);
+        $p->setImage($obj->image);
+        $p->setDescription($obj->description);
+        $p->setCalories($obj->calories);
+        $p->setAllergens($obj->allergens);
+
+        $res[] = $p;
     }
 
-    public function findAllByCategory($cat): array {
-        $requete = $this->cnx->prepare("SELECT * FROM Product WHERE category = :idcategory");
-        $requete->bindParam(':idcategory', $cat);
-        $requete->execute();
-        $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+    return $res;
+}
 
-        $res = [];
-        foreach($answer as $obj){
-            $p = new Product($obj->id);
-            $p->setName($obj->name);
-            $p->setIdcategory($obj->category);
-            $p->setPrice($obj->price);
-            $p->setImage($obj->image); 
-            $p->setDescription($obj->description);
-            $p->setCalories($obj->calories);
-            $p->setAllergens($obj->allergens); 
-            array_push($res, $p);
-        }
-        return $res;
+    public function findAllByCategory($cat): array {
+    $requete = $this->cnx->prepare("SELECT * FROM Product WHERE category = :idcategory");
+    $requete->bindParam(':idcategory', $cat);
+    $requete->execute();
+    $answer = $requete->fetchAll(PDO::FETCH_OBJ);
+
+    $res = [];
+
+    $imgRepo = new ProductImageRepository();
+
+    foreach($answer as $obj){
+        $p = new Product($obj->id);
+        $p->setName($obj->name);
+        $p->setIdcategory($obj->category);
+        $p->setPrice($obj->price);
+        $p->setImage($obj->image); 
+        $p->setDescription($obj->description);
+        $p->setCalories($obj->calories);
+        $p->setAllergens($obj->allergens);
+
+        $res[] = $p;
+    }
+
+    return $res;
 }
 
     public function save($product){
