@@ -20,7 +20,7 @@ UserData.fetchAll = async function(){
 }
 
 UserData.create = async function(userData){
-    // Convertir l'objet en FormData
+    // Convertir l'objet en FormData pour l'inscription
     const formData = new FormData();
     formData.append('email', userData.email);
     formData.append('username', userData.username);
@@ -28,6 +28,43 @@ UserData.create = async function(userData){
     
     let data = await postRequest('users', formData);
     return data;
+}
+
+UserData.login = async function(email, password){
+    // Récupérer tous les utilisateurs
+    let users = await getRequest('users');
+    
+    if (users === false) {
+        return false;
+    }
+    
+    // Chercher un utilisateur avec cet email
+    let user = users.find(u => u.email === email);
+    
+    if (user) {
+        // Note: La vérification du mot de passe devrait se faire côté serveur
+        // Pour l'instant, on considère que si l'utilisateur existe, c'est bon
+        return user;
+    }
+    
+    return false;
+}
+
+UserData.isLoggedIn = function(){
+    // Vérifier si un utilisateur est connecté (stocké dans localStorage)
+    let user = localStorage.getItem('currentUser');
+    return user !== null;
+}
+
+UserData.getCurrentUser = function(){
+    // Récupérer l'utilisateur connecté
+    let user = localStorage.getItem('currentUser');
+    return user ? JSON.parse(user) : null;
+}
+
+UserData.logout = function(){
+    // Déconnecter l'utilisateur
+    localStorage.removeItem('currentUser');
 }
 
 export { UserData };

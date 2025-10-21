@@ -11,6 +11,15 @@ import { The404Page } from "./pages/404/page.js";
 
 // Exemple d'utilisation avec authentification
 
+const currentUser = UserData.getCurrentUser();
+if (currentUser) {
+    console.log('👤 Utilisateur déjà connecté:', currentUser.username);
+    router.setAuth(true);
+} else {
+    console.log('👤 Aucun utilisateur connecté');
+    router.setAuth(false);
+}
+
 const router = new Router('app');
 
 router.addLayout("/", RootLayout);
@@ -19,7 +28,7 @@ router.addRoute("/", HomePage);
 router.addRoute("/about", AboutPage);
 
 router.addRoute("/products", ProductsPage);
-router.addRoute("/login", SignInPage);
+router.addRoute("/login", SignInPage, { useLayout: false });
 router.addRoute("/products/categories/:id", ProductsPage);
 
 router.addRoute("/products/:id/:slug", ProductDetailPage);

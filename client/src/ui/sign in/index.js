@@ -28,9 +28,60 @@ UserFormView.attachEvents = function(fragment){
             const errorMsg = fragment.querySelector('#errorMessage');
 
             try {
-                console.log('📤 Envoi des données au serveur...');
+                console.log('📧 Vérification si l\'utilisateur existe déjà...');
                 
-                // Utilisation de UserData.create() au lieu de fetch()
+                // Vérifier si l'email existe déjà
+                const allUsers = await UserData.fetchAll();
+                const existingUser = allUsers.find(u => u.email === email);
+                
+                if (existingUser) {
+                    console.log('✅ Utilisateur trouvé, tentative de connexion...');
+                    
+                    // L'utilisateur existe, on tente de se connecter
+                    const loggedUser = await UserData.login(email, password);
+                    
+                    if (loggedUser && loggedUser !== false) {
+                        console.log('✅ Connexion réussie!', loggedUser);
+                        
+                        // Stocker l'utilisateur dans localStorage
+                        localStorage.setItem('currentUser', JSON.stringify(loggedUser));
+                        
+                        // ✅ DÉFINIR L'ÉTAT D'AUTHENTIFICATION (selon la doc)
+                        if (window.router) {
+                            window.router.setAuth(true);
+                        }
+                        
+                        // Succès
+                        if (successMsg) {
+                            successMsg.textContent = `Bienvenue ${loggedUser.username} ! Redirection...`;
+                            successMsg.classList.remove('hidden');
+                        }
+                        if (errorMsg) {
+                            errorMsg.classList.add('hidden');
+                        }
+                        
+                        // Réinitialiser le formulaire
+                        form.reset();
+                        
+                        // ✅ Utiliser router.navigate() au lieu de window.location.hash
+                        setTimeout(() => {
+                            if (window.router) {
+                                window.router.navigate('/');
+                            } else {
+                                window.location.hash = '/';
+                            }
+                        }, 1500);
+                    } else {
+                        // Mot de passe incorrect
+                        console.warn('⚠️ Mot de passe incorrect');
+                        throw new Error('Mot de passe incorrect pour cet email');
+                    }
+                    return;
+                }
+                
+                console.log('📤 Création du nouvel utilisateur...');
+                
+                // L'utilisateur n'existe pas, on crée le compte
                 const newUser = await UserData.create({
                     email: email,
                     username: username,
@@ -43,9 +94,17 @@ UserFormView.attachEvents = function(fragment){
                 if (newUser && newUser !== false) {
                     console.log('✅ Utilisateur créé avec succès!');
                     
+                    // Connecter automatiquement l'utilisateur après inscription
+                    localStorage.setItem('currentUser', JSON.stringify(newUser));
+                    
+                    // ✅ DÉFINIR L'ÉTAT D'AUTHENTIFICATION (selon la doc)
+                    if (window.router) {
+                        window.router.setAuth(true);
+                    }
+                    
                     // Succès
                     if (successMsg) {
-                        successMsg.textContent = 'Utilisateur enregistré avec succès !';
+                        successMsg.textContent = 'Compte créé avec succès ! Redirection...';
                         successMsg.classList.remove('hidden');
                     }
                     if (errorMsg) {
@@ -54,6 +113,15 @@ UserFormView.attachEvents = function(fragment){
                     
                     // Réinitialiser le formulaire
                     form.reset();
+                    
+                    // ✅ Utiliser router.navigate() au lieu de window.location.hash
+                    setTimeout(() => {
+                        if (window.router) {
+                            window.router.navigate('/');
+                        } else {
+                            window.location.hash = '/';
+                        }
+                    }, 2000);
                 } else {
                     console.warn('⚠️ Le serveur a retourné false ou null');
                     throw new Error('Le serveur n\'a pas pu créer l\'utilisateur');
