@@ -4,7 +4,7 @@
  */
 
 
-let API_URL = "http://mmi.unilim.fr/~hujol3/SAE301/api/";
+let API_URL = "https://mmi.unilim.fr/~hujol3/SAE301/api/";
 
 
 /**
@@ -59,7 +59,6 @@ let getRequest = async function(uri){
 let postRequest = async function(uri, data){
     // Défition des options de la requêtes
     let options = {
-        credentials: 'include', // inclure les cookies dans la requête
         method: 'POST',
         header: {
             Content_Type: 'multipart/form-data' // type de données envoyées (nécessaire si upload fichier)
