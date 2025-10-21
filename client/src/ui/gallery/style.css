@@ -1,0 +1,35 @@
+/* Gallery Component */
+.product-gallery {
+  display: flex;
+  align-items: center; /* centre les images verticalement */
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.gallery-image {
+  width: 100%;
+  max-width: 180px; /* limite la taille max */
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+
+.gallery-image:hover {
+  opacity: 0.75;
+}
+
+/* Responsive : 2 colonnes sur mobile */
+@media (max-width: 768px) {
+  .product-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+  }
+
+  .gallery-image {
+    width: 100%;
+  }
+}

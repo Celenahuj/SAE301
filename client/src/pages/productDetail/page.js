@@ -2,6 +2,7 @@ import { ProductData } from "../../data/product.js";
 import { ProductImageData } from "../../data/productimage.js";
 import { htmlToFragment } from "../../lib/utils.js";
 import { DetailView } from "../../ui/detail/index.js";
+import { GalleryView } from "../../ui/gallery/index.js";
 import template from "./template.html?raw";
 
 let M = {
@@ -39,6 +40,15 @@ C.handler_clickOnBack = function (ev) {
   history.back();
 };
 
+C.handler_clickOnGalleryImage = function (ev) {
+  if (ev.target.classList.contains("gallery-image")) {
+    const mainImage = document.querySelector("#main-image");
+    if (mainImage) {
+      mainImage.src = ev.target.dataset.image;
+    }
+  }
+};
+
 C.init = async function (params) {
   const productId = params.id;
 
@@ -47,7 +57,6 @@ C.init = async function (params) {
 
   // Charger toutes les images
   M.productImages = await ProductImageData.fetchAll();
-  console.log("ProductImages:", M.productImages);
 
   // Récupérer le produit courant
   let p = M.getProductById(productId);
@@ -55,17 +64,7 @@ C.init = async function (params) {
   // Attacher les images au produit
   if (p) {
     p.images = M.getImagesByProductId(productId);
-    console.log("Images:", p.images);
-
-    // Créer le HTML de la galerie
-    p.gallery = "";
-    for (let img of p.images) {
-      p.gallery += `<img src="${img.src}" alt="Image ${img.id}" class="w-full aspect-square object-cover rounded cursor-pointer hover:opacity-75 transition">`;
-    }
   }
-  console.log("Images du produit :", p.images);
-  console.log("Product loaded:", p);
-
 
   return V.init(p);
 };
@@ -80,11 +79,19 @@ V.init = function (data) {
 
 V.createPageFragment = function (data) {
   let pageFragment = htmlToFragment(template);
+  
+  // Créer le DOM du composant detail
   let detailDOM = DetailView.dom(data);
+  
+  // Créer le DOM du composant gallery
+  let galleryDOM = GalleryView.dom(data);
 
-  // Remplacer le slot par le composant detail
-  const slot = pageFragment.querySelector('slot[name="detail"]');
-  if (slot) slot.replaceWith(detailDOM);
+  // Remplacer les slots
+  const detailSlot = pageFragment.querySelector('slot[name="detail"]');
+  if (detailSlot) detailSlot.replaceWith(detailDOM);
+
+  const gallerySlot = pageFragment.querySelector('slot[name="gallery"]');
+  if (gallerySlot) gallerySlot.replaceWith(galleryDOM);
 
   return pageFragment;
 };
@@ -96,6 +103,12 @@ V.attachEvents = function (pageFragment) {
   const backBtn = pageFragment.querySelector("#btnRetour");
   if (backBtn) {
     backBtn.addEventListener("click", C.handler_clickOnBack);
+  }
+
+  // Ajouter l'événement pour changer l'image principale
+  const gallery = pageFragment.querySelector(".product-gallery");
+  if (gallery) {
+    gallery.addEventListener("click", C.handler_clickOnGalleryImage);
   }
 
   return pageFragment;

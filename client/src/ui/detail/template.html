@@ -1,42 +1,38 @@
-<article class="min-h-screen bg-white py-12 p-6">
-  <h1 class="text-4xl font-cormorant text-black mb-8">
+<article class="min-h-screen py-24 px-12">
+  <h1 class="text-5xl md:text-7xl font-cormorant tracking-[0.25em] text-black mb-20 uppercase">
     {{name}}
   </h1>
 
-  <div class="mx-auto flex flex-col md:flex-row gap-12 max-w-5xl">
-    <!-- Section Image du produit avec galerie -->
-    <div class="md:w-1/2">
-      <!-- Image principale -->
-      <div class="flex justify-center items-center w-fit">
-        <img 
-          id="main-image"
-          src="/{{image}}" 
-          alt="{{name}}" 
-          class="rounded-lg object-cover w-full h-64 md:h-80"
-        />
-      </div>
-      
-      <!-- Galerie d'images -->
-      <div class="product-gallery grid grid-cols-4 gap-2 mt-4">
-        {{gallery}}
-      </div>
+  <div class="mx-auto flex flex-col md:flex-row items-center justify-center gap-24 max-w-7xl">
+    <!-- Image du produit -->
+    <div class="md:w-1/2 flex justify-center">
+      <img 
+        id="main-image"
+        src="/{{image}}" 
+        alt="{{name}}" 
+        class="object-contain w-96 md:w-[28rem]"
+      />
     </div>
 
     <!-- Contenu du produit -->
-    <div class="md:w-1/2 flex flex-col justify-between">
-      <div>
-        <p class="text-black mb-6 text-lg leading-relaxed">{{description}}</p>
-        <p class="text-black mb-2">Allergènes : {{allergens}}</p>
-        <p class="text-black mb-2">Valeur énergétique : {{calories}} kcal</p>
-        <p class="text-2xl font-semibold text-black mt-6">{{price}} €</p>
+    <div class="md:w-1/2 text-center md:text-left text-black leading-relaxed">
+      <p class="text-lg md:text-xl mb-8">
+        {{description}}
+      </p>
+
+      <div class="space-y-3 text-base md:text-lg mb-8">
+        <p><span class="font-semibold">Allergènes :</span> {{allergens}}</p>
+        <p><span class="font-semibold">Valeur énergétique :</span> Environ {{calories}} kcal</p>
       </div>
+
+      <p class="text-2xl mb-10 font-semibold">Prix : {{price}} €</p>
 
       <button 
         data-buy="{{id}}" 
-        class="mt-8 w-full md:w-auto border border-black px-8 py-3 text-lg font-medium text-black hover:text-black hover:opacity-30 transition-all duration-300"
+        class="border border-black px-10 py-4 text-base tracking-wider font-light hover:opacity-35 transition-all duration-300"
       >
         AJOUTER AU PANIER
       </button>
     </div>
   </div>
-</article>.
+</article>
