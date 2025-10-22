@@ -1,8 +1,8 @@
 import { htmlToFragment } from "../../lib/utils.js";
-import { UserFormView } from "../../ui/sign in/index.js";
+import { UserFormView } from "../../ui/signup/index.js";
 import template from "./template.html?raw";
 
-let M = {};
+
 let C = {};
 
 // Initialisation
