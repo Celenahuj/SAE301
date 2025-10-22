@@ -25,7 +25,8 @@ let API_URL = "https://mmi.unilim.fr/~hujol3/SAE301/api/";
 let getRequest = async function(uri){
 
     let options = {
-        method: "GET"
+        method: "GET",
+        credentials: "include"
     };
 
     try{
@@ -59,6 +60,7 @@ let getRequest = async function(uri){
 let postRequest = async function(uri, data){
     // Défition des options de la requêtes
     let options = {
+        credentials : 'include',
         method: 'POST',
         header: {
             Content_Type: 'multipart/form-data' // type de données envoyées (nécessaire si upload fichier)
@@ -81,7 +83,33 @@ let postRequest = async function(uri, data){
     return $obj; // et on retourne le tout (response.json() a déjà converti le json en objet Javscript)
 }
 
+let jsonpostRequest = async function(uri, data){
+    let jsondata = JSON.stringify(data); // conversion des données en JSON
+    let options = {
+        method: 'POST',
+        credentials : 'include',
+        headers: {
+            'Content-Type': 'application/json' // type de données envoyées (nécessaire si upload fichier)
+        },
+        body: jsondata
+    }
 
+    try{
+        var response = await fetch(API_URL+uri, options); // exécution (asynchrone) de la requête et attente de la réponse
+    }
+    catch(e){
+        console.error("Echec de la requête : " + e); // affichage de l'erreur dans la console
+        return false;
+    }
+    
+    if (response.status === 200 || response.status === 201){
+        let $obj = await response.json(); // extraction du json retourné par le serveur
+        return $obj; // retourne l'objet Javascript
+    }
+    
+    console.error("Erreur de requête : " + response.status); // affichage de l'erreur dans la console
+    return false; // retourne false pour indiquer l'échec
+}
 
 /**
  *  deleteRequest
@@ -114,4 +142,4 @@ let patchRequest = async function(uri, data){
 }
 
 
-export {getRequest, postRequest }
+export {getRequest, postRequest, jsonpostRequest }

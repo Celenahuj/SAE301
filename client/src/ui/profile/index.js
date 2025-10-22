@@ -1,12 +1,12 @@
 import { htmlToFragment } from "../../lib/utils.js";
 import template from "./template.html?raw";
 
-let UserFormView = {};
+let ProfileView = {};
 
 // Créer uniquement le DOM du formulaire (pas d'événements)
-UserFormView.dom = function(){
+ProfileView.dom = function(){
     let fragment = htmlToFragment(template);
     return fragment;
 }
 
-export { UserFormView };
+export { ProfileView };
