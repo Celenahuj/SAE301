@@ -30,6 +30,17 @@ class User extends Entity {
     }
 
     /**
+     * Set the value of id (uniquement pour après save())
+     *
+     * @return  self
+     */ 
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
      *  Define how to convert/serialize a User to a JSON format
      *  This method will be automatically invoked by json_encode when apply to a User
      *  

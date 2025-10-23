@@ -30,33 +30,35 @@ let fakeUsers = [
 ];
 
 UserData.fetch = async function (id) {
-  let data = await postRequest("users/" + id);
+  let data = await getRequest("users/" + id);
   return data == false ? [] : [data];
 };
 
 UserData.fetchAll = async function () {
-  let data = await getRequest("users/");
+  let data = await getRequest("users");
   return data == false ? fakeUsers : data;
 };
 
 UserData.create = async function (userData) {
-  const data = await jsonpostRequest("users/", userData);
+  const data = await jsonpostRequest("users", userData);
   return data;
 };
 
+// ✅ "Pour s'authentifier, on enverra en post les données à api/auth/login"
 UserData.login = async function (email, password) {
-    
-  const data = await jsonpostRequest("users?login", { email, password });
+  const data = await jsonpostRequest("auth/login", { email, password });
   return data;
 };
 
-UserData.logout = async function () {
-  const data = await getRequest("users?logout");
-  return data;
-};
-
+// ✅ Pour vérifier l'authentification
 UserData.Auth = async function () {
-  const data = await getRequest("users?auth");
+  const data = await getRequest("auth");
+  return data;
+};
+
+// ✅ Pour la déconnexion (bonus)
+UserData.logout = async function () {
+  const data = await jsonpostRequest("auth/logout", {});
   return data;
 };
 

@@ -77,24 +77,24 @@ class UserRepository extends EntityRepository {
     }
 
     public function save($user): bool {
-        $requete = $this->cnx->prepare("INSERT INTO User (email, password, username) VALUES (:email, :password, :username)");
-        $email = $user->getEmail();
-        $password = $user->getPassword();
-        $username = $user->getUsername();
-        
-        $requete->bindParam(':email', $email);
-        $requete->bindParam(':password', $password);
-        $requete->bindParam(':username', $username);
-        
-        $ok = $requete->execute();
-        
-        if ($ok){
-            $id = $this->cnx->lastInsertId();
-            $user = $this->find($id);
-        }
-        
-        return $ok;
+    $requete = $this->cnx->prepare("INSERT INTO User (email, password, username) VALUES (:email, :password, :username)");
+    $email = $user->getEmail();
+    $password = $user->getPassword();
+    $username = $user->getUsername();
+    
+    $requete->bindParam(':email', $email);
+    $requete->bindParam(':password', $password);
+    $requete->bindParam(':username', $username);
+    
+    $ok = $requete->execute();
+    
+    if ($ok){
+        $id = $this->cnx->lastInsertId();
+        $user->setId($id); 
     }
+    
+    return $ok;
+}
 
     public function delete($id): bool {
         $requete = $this->cnx->prepare("DELETE FROM User WHERE id=:id");
