@@ -8,17 +8,6 @@ class AuthController extends EntityController {
 
     public function __construct(){
         $this->users = new UserRepository();
-        
-        // ✅ Configuration session
-        if (session_status() === PHP_SESSION_NONE) {
-            ini_set('session.cookie_lifetime', 86400);
-            ini_set('session.cookie_path', '/');
-            ini_set('session.cookie_httponly', true);
-            ini_set('session.cookie_samesite', 'None');
-            ini_set('session.cookie_secure', false);
-            
-            session_start();
-        }
     }
 
     /**
@@ -45,11 +34,17 @@ class AuthController extends EntityController {
                 return ["error" => "Email ou mot de passe incorrect"];
             }
 
-            $_SESSION['authenticated'] = true;
-            $_SESSION['user_id'] = $user->getId();
+            if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+            }
+            // ✅ Stocker les infos en session
+            $_SESSION['id'] = $user->getId();
+            $_SESSION['email'] = $user->getEmail();
+            $_SESSION['username'] = $user->getUsername();
 
             return [
                 "success" => true,
+                "message" => "Connexion réussie",
                 "id" => $user->getId(),
                 "email" => $user->getEmail(),
                 "username" => $user->getUsername()
@@ -75,11 +70,12 @@ class AuthController extends EntityController {
 
     /**
      * GET /api/auth → Vérifier l'authentification
-     * "Un simple appel à session_start suffira à restaurer la session en cours"
      */
     protected function processGetRequest(HttpRequest $request) {
-        // ✅ La présence des données de session = preuve qu'il est authentifié
-        if (isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true && isset($_SESSION['id'])) {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (isset($_SESSION['id'])) {
             $user = $this->users->find($_SESSION['id']);
             
             if ($user) {
@@ -92,7 +88,6 @@ class AuthController extends EntityController {
             }
         }
         
-        // ✅ Absence des données = pas encore authentifié
         return ["auth" => false];
     }
 }

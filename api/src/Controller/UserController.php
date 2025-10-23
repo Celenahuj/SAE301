@@ -13,6 +13,12 @@ class UserController extends EntityController {
     public function __construct(){
         $this->users = new UserRepository();
         if (session_status() === PHP_SESSION_NONE) {
+            ini_set('session.cookie_lifetime', 86400);
+            ini_set('session.cookie_path', '/');
+            ini_set('session.cookie_httponly', true);
+            ini_set('session.cookie_samesite', 'Lax');
+            ini_set('session.cookie_secure', false);
+            
             session_start();
         }
     }

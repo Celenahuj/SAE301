@@ -1,6 +1,6 @@
 import { htmlToFragment } from "../../lib/utils.js";
 import { UserFormView } from "../../ui/login/index.js";
-import { UserData } from "../../data/user.js";
+import { AuthData } from "../../data/auth.js";
 import template from "./template.html?raw";
 
 let M = {
@@ -24,7 +24,7 @@ C.handler_form = async function (event) {
 
   try {
     console.log("🔐 Tentative de connexion..."); // ← Debug
-    let user = await UserData.login(email, password);
+    let user = await AuthData.login(email, password);
     console.log("📦 Réponse reçue:", user); // ← Debug
 
     // ✅ Vérifier que c'est un objet utilisateur valide

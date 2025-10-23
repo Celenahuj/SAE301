@@ -6,12 +6,21 @@ ini_set("log_errors", 1); // Logger les erreurs dans un fichier
 
 header("Content-Type: application/json; charset=utf-8");
 
+// Configuration des cookies de session pour cross-domain
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'domain' => '',
+    'secure' => true,
+    'httponly' => true,
+    'samesite' => 'None'
+]);
+
 require_once "src/Controller/ProductController.php";
 require_once "src/Controller/CategoryController.php";
 require_once "src/Controller/ProductImageController.php";
 require_once "src/Controller/UserController.php";
 require_once "src/Controller/AuthController.php";
-
 require_once "src/Class/HttpRequest.php";
 
 

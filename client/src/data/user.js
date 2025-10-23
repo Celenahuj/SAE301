@@ -44,22 +44,5 @@ UserData.create = async function (userData) {
   return data;
 };
 
-// ✅ "Pour s'authentifier, on enverra en post les données à api/auth/login"
-UserData.login = async function (email, password) {
-  const data = await jsonpostRequest("auth/login", { email, password });
-  return data;
-};
-
-// ✅ Pour vérifier l'authentification
-UserData.Auth = async function () {
-  const data = await getRequest("auth");
-  return data;
-};
-
-// ✅ Pour la déconnexion (bonus)
-UserData.logout = async function () {
-  const data = await jsonpostRequest("auth/logout", {});
-  return data;
-};
 
 export { UserData };
