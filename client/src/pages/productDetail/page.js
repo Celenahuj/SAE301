@@ -1,5 +1,6 @@
 import { ProductData } from "../../data/product.js";
 import { ProductImageData } from "../../data/productimage.js";
+import { CartData } from "../../data/cart.js";
 import { htmlToFragment } from "../../lib/utils.js";
 import { DetailView } from "../../ui/detail/index.js";
 import { GalleryView } from "../../ui/gallery/index.js";
@@ -8,6 +9,7 @@ import template from "./template.html?raw";
 let M = {
   products: [],
   productImages: [],
+  currentProduct: null
 };
 
 M.getProductById = function (id) {
@@ -28,10 +30,22 @@ M.getImagesByProductId = function (id) {
 
 let C = {};
 
-C.handler_clickOnProduct = function (ev) {
+C.handler_clickOnProduct = async function (ev) {
   if (ev.target.dataset.buy !== undefined) {
     let id = ev.target.dataset.buy;
-    alert(`Produit ajouté au panier ! (Quand il y en aura un)`);
+    
+    // Utiliser le produit stocké dans M
+    if (M.currentProduct) {
+      await CartData.addItem({
+        id: M.currentProduct.id,
+        name: M.currentProduct.name,
+        description: M.currentProduct.description || '',
+        image: M.currentProduct.image ? `/${M.currentProduct.image}` : '/placeholder.png',
+        price: parseFloat(M.currentProduct.price) || 0
+      });
+      
+      alert(`✅ "${M.currentProduct.name}" ajouté au panier !`);
+    }
   }
 };
 
@@ -64,6 +78,7 @@ C.init = async function (params) {
   // Attacher les images au produit
   if (p) {
     p.images = M.getImagesByProductId(productId);
+    M.currentProduct = p; // Stocker pour le handler
   }
 
   return V.init(p);

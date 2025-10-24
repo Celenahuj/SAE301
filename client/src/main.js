@@ -7,7 +7,7 @@ import { SignupPage } from "./pages/Signup/page.js";
 import { DataPage } from "./pages/Data/page.js";
 import { LoginPage } from "./pages/Login/page.js";
 import { ProfilePage } from "./pages/Profile/page.js";
-
+import { CartPage } from "./pages/cart/page.js";
 import { RootLayout } from "./layouts/root/layout.js";
 import { The404Page } from "./pages/404/page.js";
 import { AuthData } from './data/auth.js';
@@ -24,7 +24,7 @@ const result = await AuthData.Auth();
   else {
     router.setAuth(false);
   }
-  
+
 router.addLayout("/", RootLayout);
 
 router.addRoute("/", ProductsPage);
@@ -33,6 +33,7 @@ router.addRoute("/about", AboutPage);
 router.addRoute("/products", ProductsPage);
 router.addRoute("/login", LoginPage, { useLayout: false });
 router.addRoute("/data", DataPage, { useLayout: false });
+router.addRoute("/cart", CartPage, { requireAuth: true });
 router.addRoute("/signup", SignupPage, { useLayout: false });
 router.addRoute("/products/categories/:id", ProductsPage);
 router.addRoute("/profile", ProfilePage, { requireAuth: true });

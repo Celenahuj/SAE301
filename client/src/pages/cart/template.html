@@ -1,0 +1,13 @@
+        
+<div id="cart-container" class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-sm">
+    <!-- Header -->
+    <div id="cart-header" class="flex justify-between items-center mb-8">
+        <h2 class="text-5xl font-cormorant leading-none">Panier</h2>
+        <button class="text-gray-500 hover:text-gray-800 text-3xl leading-none">
+            &times;
+        </button>
+    </div>
+
+    <!-- Le contenu du panier (items + total + bouton) sera injecté ici -->
+    <slot name="cart-items" class="space-y-6"></slot>
+</div>
