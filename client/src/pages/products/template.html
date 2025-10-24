@@ -1,8 +1,16 @@
-<div>
-  <img src="/bandeau.png" alt="bandeau" class="w-full items-center mb-4" />
-  <h1 class="font-cormorant text-5xl my-10 text-gray-900 text-center">
-    Nos produits
+<div class="text-center">
+  <h1 class="font-cormorant text-5xl md:text-5xl text-gray-900 mt-10 mb-6">
+    Bonjour {{username}}
   </h1>
 
+  <img 
+    src="/bandeau.png" 
+    alt="bandeau" 
+    class="w-full mx-auto mb-8" 
+  />
+
+  <h1 class="font-cormorant text-5xl text-gray-900 my-10">
+    Nos produits
+  </h1>
   <slot name="products"></slot>
 </div>

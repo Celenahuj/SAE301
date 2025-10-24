@@ -1,4 +1,4 @@
-import { getRequest, jsonpostRequest } from "../lib/api-request.js";
+import { getRequest, jsonpostRequest, patchRequest } from "../lib/api-request.js";
 
 let UserData = {};
 
@@ -44,5 +44,9 @@ UserData.create = async function (userData) {
   return data;
 };
 
+UserData.update = async function (id, userData) {
+  const data = await patchRequest("users/" + id, userData);
+  return data;
+}
 
 export { UserData };

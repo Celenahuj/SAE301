@@ -4,17 +4,21 @@ error_reporting(E_ALL);
 ini_set("display_errors", 0); // ✅ Désactiver pour éviter HTML dans les réponses JSON
 ini_set("log_errors", 1); // Logger les erreurs dans un fichier
 
-header("Content-Type: application/json; charset=utf-8");
-
 // Configuration des cookies de session pour cross-domain
 session_set_cookie_params([
     'lifetime' => 0,
     'path' => '/',
     'domain' => '',
-    'secure' => true,
+    'secure' => false,
     'httponly' => true,
-    'samesite' => 'None'
+    'samesite' => 'Lax'
 ]);
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+header("Content-Type: application/json; charset=utf-8");
 
 require_once "src/Controller/ProductController.php";
 require_once "src/Controller/CategoryController.php";

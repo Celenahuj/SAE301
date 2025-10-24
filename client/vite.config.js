@@ -7,4 +7,13 @@ export default defineConfig({
   },
   plugins: [tailwindcss()],
   base: "/",
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://mmi.unilim.fr/~hujol3/SAE301',
+        changeOrigin: true,
+        secure: false,
+      }
+    }
+  }
 });

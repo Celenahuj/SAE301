@@ -2,9 +2,14 @@ import { ProductData } from "../../data/product.js";
 import { CategoryData } from "../../data/category.js";
 import { CardView } from "../../ui/card/index.js";
 import { htmlToFragment } from "../../lib/utils.js";
+import { AuthData } from "../../data/auth.js";
+import { genericRenderer } from "../../lib/utils.js";
 import template from "./template.html?raw";
 
-let M = { products: [] };
+let M = { 
+    products: [],
+    user: null
+};
 let C = {};
 
 // Gestion du clic sur un produit
@@ -17,6 +22,16 @@ C.handler_clickOnProduct = function(ev){
 
 // Initialisation
 C.init = async function(params){
+    // Récupérer l'utilisateur connecté
+    try {
+        let authResult = await AuthData.Auth();
+        if (authResult && authResult.auth === true) {
+            M.user = authResult;
+        }
+    } catch (err) {
+        console.log("Utilisateur non connecté");
+    }
+
     // récupérer les produits
     if(params?.id){
         M.products = await CategoryData.fetchByCategory(params.id);
@@ -38,7 +53,11 @@ V.init = function(products){
 
 // Création de la page
 V.createPageFragment = function(products){
-    let pageFragment = htmlToFragment(template);
+    // Remplacer {{username}} par le nom d'utilisateur ou un message par défaut
+    let username = M.user?.username || "";
+    let renderedTemplate = genericRenderer(template, { username });
+    
+    let pageFragment = htmlToFragment(renderedTemplate);
 
     // injecter les produits dynamiques
     let productsSlot = pageFragment.querySelector('slot[name="products"]');

@@ -83,34 +83,64 @@ class UserController extends EntityController {
         return false;
     }
 
+
     protected function processPatchRequest(HttpRequest $request) {
         $id = $request->getId("id");
-        if ($id){
-            $u = $this->users->find($id);
-            if ($u == null) return false;
-            
-            $json = $request->getJson();
-            $obj = json_decode($json);
-            
-            // Mise à jour des champs fournis
-            if (isset($obj->email)) {
-                $u->setEmail($obj->email);
-            }
-            if (isset($obj->username)) {
-                $u->setUsername($obj->username);
-            }
-            if (isset($obj->password)) {
-                // Hash du nouveau mot de passe
-                $hashedPassword = password_hash($obj->password, PASSWORD_DEFAULT);
-                $u->setPassword($hashedPassword);
-            }
-            
-            $ok = $this->users->update($u);
-            return $ok ? $u : false;
+        
+        // ✅ Vérifier que l'ID existe
+        if (!$id) {
+            http_response_code(400);
+            return ["error" => "ID utilisateur manquant"];
         }
-        return false;
-    }
 
+        // ✅ Chercher l'utilisateur UNE SEULE FOIS
+        $u = $this->users->find($id);
+        
+        if ($u == null) {
+            http_response_code(404);
+            return ["error" => "Utilisateur non trouvé"];
+        }
+
+        // ✅ Récupérer les données JSON
+        $json = $request->getJson();
+        $obj = json_decode($json);
+
+        if (!$obj) {
+            http_response_code(400);
+            return ["error" => "Données JSON invalides"];
+        }
+
+        // ✅ Mise à jour des champs fournis (PATCH = mise à jour partielle)
+        if (isset($obj->email)) {
+            $u->setEmail($obj->email);
+        }
+        
+        if (isset($obj->username)) {
+            $u->setUsername($obj->username);
+        }
+        
+        if (isset($obj->password) && !empty($obj->password)) {
+            // Hash du nouveau mot de passe
+            $hashedPassword = password_hash($obj->password, PASSWORD_DEFAULT);
+            $u->setPassword($hashedPassword);
+        }
+
+        // ✅ Sauvegarder en base de données
+        $ok = $this->users->update($u);
+
+        if (!$ok) {
+            http_response_code(500);
+            return ["error" => "Erreur lors de la mise à jour en base de données"];
+        }
+
+        // ✅ Retourner l'utilisateur mis à jour
+        return [
+            "id" => $u->getId(),
+            "email" => $u->getEmail(),
+            "username" => $u->getUsername()
+        ];
+    }
+    
     protected function processPutRequest(HttpRequest $request) {
         $id = $request->getId("id");
         if ($id){

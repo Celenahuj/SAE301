@@ -3,10 +3,9 @@
  *  C'est ici : https://fr.javascript.info/fetch
  */
 
-
-let API_URL = "https://mmi.unilim.fr/~hujol3/SAE301/api/";
-
-
+let API_URL = import.meta.env.DEV 
+    ? "/api/" 
+    : "https://mmi.unilim.fr/~hujol3/SAE301/api/";
 /**
  *  getRequest
  * 
@@ -138,8 +137,37 @@ let deleteRequest = async function(uri){
  *  La fonction retourne true ou false selon le succès de l'opération
  */
 let patchRequest = async function(uri, data){
-   // Pas implémenté. TODO if needed.
+    let jsondata = JSON.stringify(data); // conversion des données en JSON
+    
+    let options = {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: jsondata
+    };
+
+    try{
+        var response = await fetch(API_URL+uri, options); // exécution (asynchrone) de la requête et attente de la réponse
+    }
+    catch(e){
+        console.error("Echec de la requête : " + e); // affichage de l'erreur dans la console
+        return false;
+    }
+    
+    if (response.status === 200 || response.status === 204){
+        // 200 = OK avec contenu, 204 = OK sans contenu
+        if (response.status === 204) {
+            return true; // Pas de contenu à retourner
+        }
+        let $obj = await response.json(); // extraction du json retourné par le serveur
+        return $obj; // retourne l'objet Javascript
+    }
+    
+    console.error("Erreur de requête : " + response.status); // affichage de l'erreur dans la console
+    return false; // retourne false pour indiquer l'échec
 }
 
 
-export {getRequest, postRequest, jsonpostRequest }
+export {getRequest, postRequest, jsonpostRequest, patchRequest }
